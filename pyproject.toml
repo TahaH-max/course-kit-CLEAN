@@ -1,0 +1,9 @@
+[project]
+name = "coursekit"
+version = "1.0.0"
+description = "Syllabus assistant: deadlines, grading, and grounded policy Q&A"
+requires-python = ">=3.10"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CourseKit</title>
+<style>
+  :root {
+    --bg: #fbfaf7; --panel: #ffffff; --ink: #222018; --muted: #77746a; --line: #e8e4da;
+    --accent: #3b5bdb; --exam: #c92a2a; --quiz: #e67700; --assignment: #2b8a3e; --mark: #fff3bf;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #161512; --panel: #1f1e1a; --ink: #ecebe6; --muted: #a09c90; --line: #34322c;
+            --accent: #91a7ff; --exam: #ff8787; --quiz: #ffc078; --assignment: #8ce99a; --mark: #5c4b0f; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+  header { padding: 28px 0 12px; }
+  header h1 { font-family: var(--serif); font-weight: 600; font-size: 30px; margin: 0; letter-spacing: -0.01em; }
+  header p { margin: 2px 0 0; color: var(--muted); }
+  main { display: grid; grid-template-columns: 1fr 320px; gap: 20px; padding-bottom: 48px; }
+  @media (max-width: 800px) { main { grid-template-columns: 1fr; } }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; }
+  h2 { font-family: var(--serif); font-size: 18px; font-weight: 600; margin: 0 0 10px; }
+  h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 16px 0 6px; }
+  form { display: flex; gap: 8px; }
+  input[type=text] { flex: 1; min-width: 0; font: inherit; color: var(--ink); background: var(--bg);
+                     border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+  button, .btn { font: inherit; border-radius: 8px; padding: 9px 14px; cursor: pointer; text-decoration: none;
+           border: 1px solid var(--accent); background: var(--accent); color: var(--panel); display: inline-block; }
+  .btn.ghost { background: none; color: var(--accent); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .chip { background: var(--bg); color: var(--ink); border: 1px solid var(--line); font-size: 13px; padding: 4px 10px; border-radius: 999px; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em;
+           padding: 2px 8px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); margin-right: 6px; }
+  .badge.ok { color: var(--assignment); border-color: currentColor; }
+  .badge.no { color: var(--quiz); border-color: currentColor; }
+  .badge.bad { color: var(--exam); border-color: currentColor; }
+  .explain { font: 12px ui-monospace, Menlo, monospace; color: var(--muted); margin: 6px 0 0; }
+  .answer { font-size: 16px; margin: 12px 0; white-space: pre-line; }
+  .dl { list-style: none; margin: 0; padding: 0; }
+  .dl li { display: grid; grid-template-columns: 92px 1fr; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .dl li:last-child { border-bottom: 0; }
+  .date { font-family: var(--serif); font-size: 15px; }
+  .date small { display: block; color: var(--muted); font-family: system-ui, sans-serif; font-size: 12px; }
+  .what { font-size: 14px; } .what b { font-weight: 600; }
+  .kind { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+  .kind.exam { background: var(--exam); } .kind.quiz { background: var(--quiz); } .kind.assignment { background: var(--assignment); }
+  .src { color: var(--muted); font-size: 12px; font-style: italic; }
+  .source { border-top: 1px solid var(--line); padding: 10px 0; font-size: 14px; }
+  .source pre { white-space: pre-wrap; font: inherit; margin: 4px 0 0; }
+  .source .meta { color: var(--muted); font-size: 12px; }
+  mark { background: var(--mark); color: inherit; }
+  ul.checks { list-style: none; padding: 0; margin: 0; font-size: 13px; }
+  ul.checks li::before { content: "✓ "; color: var(--assignment); }
+  ul.checks li.fail::before { content: "✗ "; color: var(--exam); }
+  .course { padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .course:last-child { border-bottom: 0; }
+  .warn { color: var(--quiz); font-size: 13px; margin-top: 4px; }
+  .muted { color: var(--muted); font-size: 13px; }
+  aside { display: grid; gap: 20px; align-content: start; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>CourseKit</h1>
+    <p>Ask about your syllabi. Dates come straight from the syllabus, and policy answers are checked against it.</p>
+  </header>
+  <main>
+    <section class="card">
+      <h2>Ask</h2>
+      <form id="ask-form">
+        <input id="q" type="text" placeholder="What's due next week?" required>
+        <button>Ask</button>
+      </form>
+      <div class="chips" id="examples"></div>
+      <div id="result" class="hidden"></div>
+    </section>
+
+    <aside>
+      <section class="card">
+        <h2>Coming up</h2>
+        <p class="muted" id="today"></p>
+        <ul class="dl" id="upcoming"></ul>
+        <a class="btn ghost" href="/calendar.ics" style="margin-top:12px">Download calendar (.ics)</a>
+      </section>
+      <section class="card">
+        <h2>Courses</h2>
+        <div id="courses"></div>
+        <h3>Add a syllabus</h3>
+        <input type="file" id="upload" accept=".md,.txt,.pdf">
+        <p class="muted" id="upload-msg"></p>
+        <p class="muted" id="mode"></p>
+      </section>
+    </aside>
+  </main>
+</div>
+
+<script>
+const $ = (s) => document.querySelector(s);
+const el = (tag, props = {}, ...kids) => { const n = Object.assign(document.createElement(tag), props); kids.forEach(k => k != null && n.append(k)); return n; };
+const fmt = (iso) => { const d = new Date(iso + "T12:00:00"); return [d.toLocaleDateString("en-US", { month: "short", day: "numeric" }), d.toLocaleDateString("en-US", { weekday: "long" })]; };
+const examples = ["What's due next week?", "When is midterm 2?", "When is my next quiz?", "How much is the final exam worth in CSC 216?",
+  "What's the late policy for programming assignments?", "Can I use a calculator on probability exams?", "What's the parking policy?"];
+examples.forEach(q => $("#examples").append(el("button", { className: "chip", type: "button", textContent: q, onclick: () => { $("#q").value = q; ask(); } })));
+
+function deadlineList(items, withSource) {
+  const ul = el("ul", { className: "dl" });
+  items.forEach(d => { const [md, wd] = fmt(d.date);
+    ul.append(el("li", {}, el("div", { className: "date" }, md, el("small", { textContent: wd })),
+      el("div", { className: "what" }, el("span", { className: `kind ${d.kind}` }), el("b", { textContent: d.course + " " }), d.title,
+        withSource ? el("div", { className: "src", textContent: `from syllabus: “${d.source_line}”` }) : null))); });
+  return ul;
+}
+function highlighted(text, quotes) {
+  const pre = el("pre"), lower = text.toLowerCase(); let pos = 0;
+  quotes.map(q => { const i = lower.indexOf(q.toLowerCase()); return i < 0 ? null : [i, i + q.length]; }).filter(Boolean)
+    .sort((a, b) => a[0] - b[0]).forEach(([s, e]) => { if (s >= pos) { pre.append(text.slice(pos, s), el("mark", { textContent: text.slice(s, e) })); pos = e; } });
+  pre.append(text.slice(pos)); return pre;
+}
+
+async function ask() {
+  const box = $("#result"); box.classList.remove("hidden");
+  box.replaceChildren(el("p", { className: "muted", textContent: "Thinking…" }));
+  const r = await fetch("/ask", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ question: $("#q").value }) });
+  const d = await r.json();
+  if (!r.ok) { box.replaceChildren(el("p", { className: "warn", textContent: JSON.stringify(d.detail) })); return; }
+  const cls = { answered: "ok", grounded: "ok", not_found: "no", unverified: "bad" }[d.status];
+  const kids = [el("div", { style: "margin-top:16px" }, el("span", { className: "badge", textContent: d.route }),
+                   el("span", { className: `badge ${cls}`, textContent: d.status.replace("_", " ") })),
+                el("p", { className: "explain", textContent: d.explanation })];
+  if (d.route === "deadlines" && d.deadlines.length) kids.push(el("div", { style: "margin-top:10px" }, deadlineList(d.deadlines, true)));
+  else kids.push(el("p", { className: "answer", textContent: d.answer }));
+  if (d.checks.length) { const ul = el("ul", { className: "checks" });
+    d.checks.forEach(c => ul.append(el("li", { className: c.passed ? "" : "fail", textContent: `${c.name.replaceAll("_", " ")} — ${c.detail}` })));
+    kids.push(el("h3", { textContent: "Verification" }), ul); }
+  if (d.sources.length) { kids.push(el("h3", { textContent: "Syllabus passages" }));
+    d.sources.forEach(s => kids.push(el("div", { className: "source" },
+      el("div", { className: "meta", textContent: `[${s.source_id}] ${s.document} › ${s.section} · score ${s.score}` }),
+      highlighted(s.text, d.citations.filter(c => c.source_id === s.source_id).map(c => c.quote))))); }
+  box.replaceChildren(...kids);
+}
+$("#ask-form").onsubmit = (e) => { e.preventDefault(); ask(); };
+
+async function load() {
+  const h = await (await fetch("/health")).json();
+  $("#mode").textContent = `LLM: ${h.provider} · embeddings: ${h.embedder}`;
+  const start = h.today, endD = new Date(h.today + "T12:00:00"); endD.setDate(endD.getDate() + 14);
+  const end = endD.toISOString().slice(0, 10);
+  $("#today").textContent = `Next two weeks from ${fmt(start)[1]}, ${fmt(start)[0]}`;
+  const up = await (await fetch(`/deadlines?start=${start}&end=${end}`)).json();
+  $("#upcoming").replaceChildren(...(up.length ? deadlineList(up, false).children : [el("li", { textContent: "Nothing due." })]));
+  const courses = await (await fetch("/courses")).json();
+  $("#courses").replaceChildren(...courses.map(c => el("div", { className: "course" },
+    el("b", { textContent: c.code }), ` ${c.title ?? ""}`,
+    el("div", { className: "muted", textContent: `${c.instructor ?? ""} · ${c.deadline_count} deadlines · ${c.grading.length} graded components` }),
+    ...c.warnings.map(w => el("div", { className: "warn", textContent: "⚠ " + w })))));
+}
+$("#upload").onchange = async (e) => {
+  const f = e.target.files[0]; if (!f) return;
+  const fd = new FormData(); fd.append("file", f);
+  const r = await fetch("/courses", { method: "POST", body: fd }); const d = await r.json();
+  $("#upload-msg").textContent = r.ok ? `Added ${d.code}: ${d.deadline_count} deadlines` : d.detail;
+  load();
+};
+load();
+</script>
+</body>
+</html>

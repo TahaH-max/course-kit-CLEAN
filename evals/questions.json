@@ -1,0 +1,174 @@
+{
+  "today": "2026-11-03",
+  "cases": [
+    {
+      "q": "What's due next week?",
+      "route": "deadlines",
+      "expect_items": [
+        "CSC 216 2026-11-10",
+        "ENG 205 2026-11-11",
+        "MAT 230 2026-11-11",
+        "MAT 230 2026-11-13"
+      ]
+    },
+    {
+      "q": "What do I have due this week?",
+      "route": "deadlines",
+      "expect_items": [
+        "MAT 230 2026-11-04",
+        "CSC 216 2026-11-05",
+        "MAT 230 2026-11-06"
+      ]
+    },
+    {
+      "q": "When is midterm 2?",
+      "route": "deadlines",
+      "expect_items": [
+        "MAT 230 2026-11-13"
+      ]
+    },
+    {
+      "q": "When is homework 9 due?",
+      "route": "deadlines",
+      "expect_items": [
+        "MAT 230 2026-11-11"
+      ]
+    },
+    {
+      "q": "When is my next quiz?",
+      "route": "deadlines",
+      "expect_items": [
+        "MAT 230 2026-11-06"
+      ]
+    },
+    {
+      "q": "When is the final for data structures?",
+      "route": "deadlines",
+      "expect_items": [
+        "CSC 216 2026-12-15"
+      ]
+    },
+    {
+      "q": "When are my finals?",
+      "route": "deadlines",
+      "expect_items": [
+        "CSC 216 2026-12-15",
+        "MAT 230 2026-12-16"
+      ]
+    },
+    {
+      "q": "What exams are in December?",
+      "route": "deadlines",
+      "expect_items": [
+        "CSC 216 2026-12-15",
+        "MAT 230 2026-12-16"
+      ]
+    },
+    {
+      "q": "When is the ENG 205 final report due?",
+      "route": "deadlines",
+      "expect_items": [
+        "ENG 205 2026-12-16"
+      ]
+    },
+    {
+      "q": "What quizzes do I have in the next 14 days?",
+      "route": "deadlines",
+      "expect_items": [
+        "MAT 230 2026-11-06",
+        "CSC 216 2026-11-10"
+      ]
+    },
+    {
+      "q": "How much is the final exam worth in CSC 216?",
+      "route": "grading",
+      "expect": "30%"
+    },
+    {
+      "q": "How much are quizzes worth in probability?",
+      "route": "grading",
+      "expect": "10%"
+    },
+    {
+      "q": "What percentage of the grade is participation in technical writing?",
+      "route": "grading",
+      "expect": "10%"
+    },
+    {
+      "q": "What is the grade breakdown for ENG 205?",
+      "route": "grading",
+      "expect": "95%"
+    },
+    {
+      "q": "What is the late policy for programming assignments?",
+      "route": "policy",
+      "expect": "10% per day"
+    },
+    {
+      "q": "Can I use a calculator on the probability exams?",
+      "route": "policy",
+      "expect": "non-graphing"
+    },
+    {
+      "q": "Can I bring notes to the final exam?",
+      "route": "policy",
+      "expect": "note sheet"
+    },
+    {
+      "q": "What are Dr. Park's office hours?",
+      "route": "policy",
+      "expect": "1:00 PM to 3:00 PM"
+    },
+    {
+      "q": "Is there a bonus for visiting the Writing Center?",
+      "route": "policy",
+      "expect": "2 bonus points"
+    },
+    {
+      "q": "Is late homework accepted in MAT 230?",
+      "route": "policy",
+      "expect": "not accepted"
+    },
+    {
+      "q": "How many classes can I miss in ENG 205?",
+      "route": "policy",
+      "expect": "two class meetings"
+    },
+    {
+      "q": "Can I use AI to write code for CSC 216?",
+      "route": "policy",
+      "expect": [
+        "AI-generated",
+        "AI generated",
+        "AI-written",
+        "cite",
+        "citing"
+      ]
+    },
+    {
+      "q": "What happens if I miss a probability exam?",
+      "route": "policy",
+      "expect": "48 hours"
+    },
+    {
+      "q": "What's the parking policy?",
+      "route": "policy",
+      "unanswerable": true
+    },
+    {
+      "q": "Who won the World Series?",
+      "route": "policy",
+      "unanswerable": true
+    },
+    {
+      "q": "Is there a textbook for CSC 216?",
+      "route": "policy",
+      "unanswerable": true
+    },
+    {
+      "q": "When is spring break?",
+      "route": "policy",
+      "unanswerable": true
+    }
+  ]
+}
